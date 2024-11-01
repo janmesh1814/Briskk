@@ -1,62 +1,96 @@
 // src/components/NewProduct.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import '../styles/NewProduct.css';
+import Navbar from './Navbarr';
 
 const NewProduct = ({ onAddProduct }) => {
-    const [name, setName] = useState('');
-    const [brand, setBrand] = useState('');
-    const [price, setPrice] = useState('');
-    const [imageUrl, setImageUrl] = useState('');
+    const [product, setProduct] = useState({
+        name: '',
+        brand: '',
+        price: '',
+        image: '',
+        description: ''
+    });
     const navigate = useNavigate();
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setProduct((prevProduct) => ({
+            ...prevProduct,
+            [name]: value
+        }));
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const newProduct = { name, brand, price, imageUrl };
         try {
-            const savedProduct = await axios.post('http://localhost:3000/products', newProduct);
-            onAddProduct(savedProduct.data);
+            const response = await fetch('http://localhost:3000/products', {
+                method: "POST",
+                headers: {
+                    'Content-Type': "application/json"
+                },
+                body: JSON.stringify(product)
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const savedProduct = await response.json();
+            onAddProduct(savedProduct);
             navigate('/');
-        } catch (e) {
-            console.log("Error in saving new Product " + e);
+        } catch (error) {
+            console.log("Error in saving new Product: ", error);
         }
-        onAddProduct(newProduct);
-        navigate('/');
     };
 
     return (
-        <div>
+        <div className='newProduct'>
+            <Navbar />
+            <hr />
             <h2>Add New Product</h2>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} className='form'>
                 <input
                     type="text"
+                    name="name"
                     placeholder="Product Name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    value={product.name}
+                    onChange={handleChange}
                     required
                 />
                 <input
                     type="text"
-                    placeholder="Brand"
-                    value={brand}
-                    onChange={(e) => setBrand(e.target.value)}
+                    name="brand"
+                    placeholder="Brand Name"
+                    value={product.brand}
+                    onChange={handleChange}
                     required
                 />
                 <input
                     type="number"
-                    placeholder="Price"
-                    value={price}
-                    onChange={(e) => setPrice(e.target.value)}
+                    name="price"
+                    placeholder="Price in INR"
+                    value={product.price}
+                    onChange={handleChange}
                     required
                 />
                 <input
                     type="text"
+                    name="image"
                     placeholder="Image URL"
-                    value={imageUrl}
-                    onChange={(e) => setImageUrl(e.target.value)}
+                    value={product.image}
+                    onChange={handleChange}
                     required
                 />
-                <button type="submit">Add Product</button>
+                <textarea
+                    name="description"
+                    placeholder="Product Description"
+                    value={product.description}
+                    onChange={handleChange}
+                    required
+                />
+                <button className='btn' type="submit">Add Product</button>
             </form>
         </div>
     );

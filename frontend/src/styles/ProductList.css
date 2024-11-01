@@ -1,0 +1,19 @@
+.product-list {
+    margin: 3rem;
+}
+
+.products {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.add-btn {
+    background-color: #118ADA;
+    color: white;
+    width: 100px;
+    margin-left: 8px;
+    padding: 4px;
+    border-radius: 4px;
+    border: none;
+}
