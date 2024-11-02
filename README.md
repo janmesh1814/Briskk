@@ -1,6 +1,6 @@
 How to set up and run?
 1.	Clone the Repository: Run the following command to clone the repository:
-######   git clone https://github.com/janmesh1814/Briskk.git
+####   git clone https://github.com/janmesh1814/Briskk.git
 3.	Change to the Product Directory: Navigate to the cloned repository's product directory:
 ##   cd product
 4.	Set Up the Backend: Change to the backend directory and install the necessary dependencies:
